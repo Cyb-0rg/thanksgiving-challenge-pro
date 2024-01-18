@@ -1,0 +1,264 @@
+{% extends 'organizers/base.html' %}
+{% block content %}
+<style>
+    .scroll {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+<div class="container text-center my-3">
+
+    <h1>Statistics Page</h1>
+    <div class="row row-cols-md-3 row-cols-sm-1 g-3 mt-2 d-flex justify-content-center">
+        <div class="col">
+            <div class="card ">
+                <div class="card-header text-center">
+                    Total Registered Count
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{register_count}}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card ">
+                <div class="card-header text-center">
+                    Total Submission Count
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{submission_count}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col mt-5">
+        <div class="card ">
+            <div class="card-header text-center">
+                Total Nationalities
+            </div>
+            <div class="card-body text-center">
+                <h5 class="card-title">{{nationalities_count}}</h5>
+            </div>
+        </div>
+    </div>
+    {% if group_by_nationalities %}
+    <div class="col mt-5">
+        <div class="card ">
+            <div class="card-header text-center">
+                Group By Nationalities
+            </div>
+            <div class="card-body text-center">
+                {% for country, count in group_by_nationalities.items %}
+                <h5 class="card-title">{{country}}: {{count}}</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if group_by_sources %}
+    <div class="col mt-5">
+        <div class="card ">
+            <div class="card-header text-center">
+                Group Clicks By Sources
+            </div>
+            <div class="card-body text-center">
+                {% for source, count in group_by_sources.items %}
+                <h5 class="card-title">{{source}}: {{count}}</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if group_by_registered_sources %}
+    <div class="col mt-5">
+        <div class="card ">
+            <div class="card-header text-center">
+                Group Registered Users By Sources
+            </div>
+            <div class="card-body text-center">
+                {% for source, count in group_by_registered_sources.items %}
+                <h5 class="card-title">{{source}}: {{count}}</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if group_by_references %}
+    <div class="col mt-5">
+        <div class="card ">
+            <div class="card-header text-center">
+                Group By References
+            </div>
+            <div class="card-body text-center">
+                {% for reference, count in group_by_references.items %} 
+                <h5 class="card-title">{{reference}}: {{count}}</h5>
+                {% endfor %} 
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- <h3 class="mt-3">Checked-in Hacker Information</h3>
+    <div class="row row-cols-md-2 row-cols-sm-1 g-3">
+        <div class="col ">
+            <div class="card h-100">
+                <div class="card-header text-center text-success">
+                    Education Level Counts
+                </div>
+                <div class="card-body text-center">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Education Level</th>
+                                <th scope="col">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for education_stat in checked_hacker_education %}
+                            <tr>
+                                <td>{{education_stat.0}}</td>
+                                <td>{{education_stat.1}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-header text-center text-success">
+                    Hacker Food Stats
+                </div>
+                <div class="card-body text-center">
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            {% for food_stat in checked_hacker_food %}
+                                <th>{{food_stat.0}}</th>
+                            {% endfor %}
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% for food_stat in checked_hacker_food %}
+                                    <td scope="col">{{food_stat.1}}</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+        <div class="col ">
+            <div class="card h-100">
+                <div class="card-header text-center text-success">
+                    Shirt Size Counts
+                </div>
+                <div class="card-body text-center">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Shirt Size</th>
+                                <th scope="col">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shirt_stat in checked_hacker_shirts %}
+                            <tr>
+                                <td>{{shirt_stat.0}}</td>
+                                <td>{{shirt_stat.1}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h3 class="mt-3">Total Hacker Information</h3>
+    <div class="row row-cols-md-2 row-cols-sm-1 g-3">
+        <div class="col ">
+            <div class="card h-100">
+                <div class="card-header text-center text-danger">
+                    Education Level Counts
+                </div>
+                <div class="card-body text-center">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Education Level</th>
+                                <th scope="col">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for education_stat in hacker_education %}
+                            <tr>
+                                <td>{{education_stat.0}}</td>
+                                <td>{{education_stat.1}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-header text-center text-danger">
+                    Hacker Food Stats
+                </div>
+                <div class="card-body text-center">
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            {% for food_stat in hacker_food %}
+                                <th>{{food_stat.0}}</th>
+                            {% endfor %}
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% for food_stat in hacker_food %}
+                                    <td scope="col">{{food_stat.1}}</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+        <div class="col ">
+            <div class="card h-100">
+                <div class="card-header text-center text-danger">
+                    Shirt Size Counts
+                </div>
+                <div class="card-body text-center">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Shirt Size</th>
+                                <th scope="col">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shirt_stat in hacker_shirts %}
+                            <tr>
+                                <td>{{shirt_stat.0}}</td>
+                                <td>{{shirt_stat.1}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+{% endblock %}
